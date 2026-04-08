@@ -115,12 +115,12 @@ export default function Catalogue() {
 
         .search-input-wrapper {
           position: relative;
-          width: 400px; /* طول أكبر للشريط */
+          width: 400px;
         }
 
         .search-input-wrapper input {
           width: 100%;
-          padding: 12px 50px 12px 20px; /* مساحة للزر داخل الشريط */
+          padding: 12px 50px 12px 20px;
           border-radius: 25px;
           border: none;
           outline: none;
@@ -136,7 +136,7 @@ export default function Catalogue() {
           background: #3b5ed7;
           color: white;
           padding: 10px 15px;
-          border-radius: 50%;
+          border-radius: 15px;
           cursor: pointer;
           font-size: 16px;
           transition: background 0.3s;
@@ -149,6 +149,7 @@ export default function Catalogue() {
         /* SLIDER */
         .slider-container {
           width: 100%;
+          position: relative;
         }
 
         .slider {
@@ -172,7 +173,7 @@ export default function Catalogue() {
           background: white;
           display: flex;
           flex-direction: column;
-          justify-content: flex-end; /* الصورة تمتد للآخر */
+          justify-content: flex-end;
           box-shadow: 0 4px 8px rgba(0,0,0,0.1);
           transition: transform 0.3s, box-shadow 0.3s;
         }
@@ -219,11 +220,11 @@ export default function Catalogue() {
         }
 
         .left {
-          left: 5px;
+          left: -15px; /* زيادة المسافة قليلاً عن الكارد */
         }
 
         .right {
-          right: 5px;
+          right: -15px; /* زيادة المسافة قليلاً عن الكارد */
         }
 
         .no-result {

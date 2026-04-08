@@ -34,7 +34,7 @@ export default function Register() {
       })
       .then((res) => {
         console.log("Inscription réussie :", res.data);
-        navigate("/login"); // rediriger apres inscription
+        navigate("/login");
       })
       .catch((err) => console.log(err));
   };
@@ -43,7 +43,7 @@ export default function Register() {
     <>
       <div className="register-container">
         <div className="card">
-          <div className="logo">📖 <span>Bibliothèque</span></div>
+          <div className="logo"> <span>Bibliothèque</span></div>
           <h2>Créer un compte</h2>
           <form onSubmit={handleRegister}>
             <label>Nom complet *</label>
@@ -120,7 +120,6 @@ export default function Register() {
         </div>
       </div>
 
-      {/* Styles inline */}
       <style>{`
         body {
           margin: 0;
@@ -132,8 +131,9 @@ export default function Register() {
           display: flex;
           justify-content: center;
           align-items: center;
-          height: calc(100vh - 80px - 60px); /* 80px navbar + 60px footer */
-          padding: 0 20px;
+          min-height: calc(100vh - 120px); /* خصم مساحة Navbar + Footer */
+          padding: 40px 20px; /* مسافة أعلى وأسفل لتجنب الالتصاق */
+          box-sizing: border-box;
         }
 
         .card {
@@ -216,14 +216,6 @@ export default function Register() {
           color: gray;
           cursor: pointer;
         }
-          .register-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh; /* full height screen */
-  padding: 20px;     /* padding ghal l-sides */
-  box-sizing: border-box;
-}
       `}</style>
     </>
   );
