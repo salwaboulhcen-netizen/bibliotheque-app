@@ -1,18 +1,21 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import books from "./booksData";
 
 function BookDetail() {
-  const { state } = useLocation();
-  const book = state;
+  const { id } = useParams();
+  const book = books.find((b) => b.id === parseInt(id));
+
+  if (!book) return <h2 style={{ textAlign: "center" }}>Livre non trouvé</h2>;
 
   return (
-    <div style={{ padding: "40px" }}>
-      <img src={book.image} style={{ width: "300px" }} />
+    <div style={{ maxWidth: "600px", margin: "40px auto", textAlign: "center" }}>
       <h1>{book.title}</h1>
       <p>{book.author}</p>
-      <p>{book.category}</p>
-      <p>{book.year}</p>
-      <p>{book.available ? "Disponible" : "Emprunté"}</p>
+      <p style={{ fontWeight: "bold", color: book.status === "Disponible" ? "green" : "red" }}>
+        {book.status}
+      </p>
+      <img src={book.image} alt={book.title} style={{ width: "100%", maxHeight: "400px", objectFit: "cover" }} />
     </div>
   );
 }
