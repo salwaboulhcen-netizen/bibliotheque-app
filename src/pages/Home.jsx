@@ -19,23 +19,29 @@ function Home() {
 
   return (
     <div style={styles.container}>
+
       {/* HERO */}
       <section style={styles.hero}>
         <img src="/biblio.png" alt="biblio" style={styles.heroImg} />
+
         <div style={styles.overlay}>
           <h1 style={styles.title}>Bienvenue à notre bibliothèque</h1>
           <p style={styles.subtitle}>
             Explorez des milliers de livres facilement
           </p>
 
-          {/* SEARCH INPUT AU DESSUS DU BOUTON */}
           <div style={styles.heroSearchContainer}>
-            <input
-              type="text"
-              placeholder="🔍 Rechercher livres, auteurs, genres..."
-              style={styles.heroSearchInput}
-            />
-            <button style={styles.heroSearchButton}>Rechercher</button>
+            <div style={styles.searchWrapper}>
+              <input
+                type="text"
+                placeholder="🔍 Rechercher livres, auteurs, genres..."
+                style={styles.heroSearchInput}
+              />
+
+              <button style={styles.heroSearchButton}>
+                Rechercher
+              </button>
+            </div>
           </div>
 
           <button
@@ -51,33 +57,29 @@ function Home() {
       <section style={styles.statsCardsSection}>
         <div style={styles.statsCards}>
           <div style={styles.statCard}>
-            <div style={{ fontSize: "30px" }}>📖</div>
-            <h2>10,000+</h2>
+            📖 <h2>10,000+</h2>
             <p>Livres disponibles</p>
           </div>
 
           <div style={styles.statCard}>
-            <div style={{ fontSize: "30px" }}>👥</div>
-            <h2>5,000+</h2>
+            👥 <h2>5,000+</h2>
             <p>Membres actifs</p>
           </div>
 
           <div style={styles.statCard}>
-            <div style={{ fontSize: "30px" }}>📈</div>
-            <h2>50+</h2>
+            📈 <h2>50+</h2>
             <p>Catégories</p>
           </div>
 
           <div style={styles.statCard}>
-            <div style={{ fontSize: "30px" }}>⏰</div>
-            <h2>24/7</h2>
+            ⏰ <h2>24/7</h2>
             <p>Accès en ligne</p>
           </div>
         </div>
       </section>
 
-      {/* BOOKS */}
-      <section style={styles.section}>
+      {/* BOOKS POPULAR */}
+      <section style={styles.booksSection}>
         <div style={styles.headerRow}>
           <h2>Livres Populaires</h2>
           <span onClick={() => navigate("/books")} style={styles.viewAll}>
@@ -87,16 +89,7 @@ function Home() {
 
         <div style={styles.cards}>
           {books.map((book) => (
-            <div
-              key={book.id}
-              style={styles.card}
-              onMouseEnter={(e) =>
-                (e.currentTarget.style.transform = "scale(1.05)")
-              }
-              onMouseLeave={(e) =>
-                (e.currentTarget.style.transform = "scale(1)")
-              }
-            >
+            <div key={book.id} style={styles.card}>
               <img src={book.image} style={styles.bookImage} />
 
               <button
@@ -116,57 +109,184 @@ function Home() {
         <p style={styles.ctaText}>
           Créez votre compte gratuitement et accédez à notre collection complète
         </p>
+
         <div style={styles.ctaButtons}>
-          <button
-            style={styles.primaryBtn}
-            onClick={() => navigate("/register")}
-          >
+          <button style={styles.primaryBtn} onClick={() => navigate("/register")}>
             S'inscrire maintenant
           </button>
-          <button
-            style={styles.secondaryBtn}
-            onClick={() => navigate("/books")}
-          >
+
+          <button style={styles.secondaryBtn} onClick={() => navigate("/books")}>
             Voir les livres
           </button>
         </div>
       </div>
+
     </div>
   );
 }
 
 const styles = {
   container: { fontFamily: "Arial" },
+
   hero: { position: "relative", height: "70vh" },
-  heroImg: { width: "100%", height: "100%", objectFit: "cover", filter: "brightness(60%)" },
-  overlay: { position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", textAlign: "center", color: "white", width: "90%" },
+
+  heroImg: {
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
+    filter: "brightness(60%)"
+  },
+
+  overlay: {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    textAlign: "center",
+    color: "white",
+    width: "90%"
+  },
+
   title: { fontSize: "clamp(28px, 5vw, 48px)" },
   subtitle: { fontSize: "clamp(14px, 2vw, 20px)", marginBottom: "20px" },
-  exploreBtn: { marginTop: "20px", padding: "12px 25px", backgroundColor: "#fff", color: "#a87009", border: "none", borderRadius: "5px", cursor: "pointer" },
 
-  // SEARCH HERO
-  heroSearchContainer: { display: "flex", justifyContent: "center", marginBottom: "20px", gap: "10px", flexWrap: "wrap" },
-  heroSearchInput: { padding: "12px 20px", borderRadius: "50px", border: "none", width: "250px", fontSize: "14px", outline: "none" },
-  heroSearchButton: { padding: "12px 25px", borderRadius: "50px", border: "none", backgroundColor: "#a87009", color: "#fff", cursor: "pointer" },
+  exploreBtn: {
+    marginTop: "20px",
+    padding: "12px 25px",
+    backgroundColor: "#fff",
+    color: "#a87009",
+    border: "none",
+    borderRadius: "5px",
+    cursor: "pointer"
+  },
+
+  heroSearchContainer: {
+    display: "flex",
+    justifyContent: "center",
+    marginBottom: "20px",
+    width: "100%",
+  },
+
+  searchWrapper: {
+    position: "relative",
+    width: "100%",
+    maxWidth: "600px",
+  },
+
+  heroSearchInput: {
+    width: "100%",
+    padding: "14px 120px 14px 20px",
+    borderRadius: "50px",
+    border: "none",
+    fontSize: "14px",
+    outline: "none",
+  },
+
+  heroSearchButton: {
+    position: "absolute",
+    right: "5px",
+    top: "50%",
+    transform: "translateY(-50%)",
+    padding: "10px 18px",
+    borderRadius: "50px",
+    border: "none",
+    backgroundColor: "#a87009",
+    color: "#fff",
+    cursor: "pointer",
+  },
 
   statsCardsSection: { padding: "20px" },
-  statsCards: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "20px" },
-  statCard: { background: "#fff", padding: "20px", borderRadius: "10px", textAlign: "center", boxShadow: "0 4px 10px rgba(0,0,0,0.1)" },
 
-  section: { padding: "40px 20px" },
-  headerRow: { display: "flex", justifyContent: "space-between", marginBottom: "20px" },
+  statsCards: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+    gap: "20px"
+  },
+
+  statCard: {
+    background: "#fff",
+    padding: "20px",
+    borderRadius: "10px",
+    textAlign: "center",
+    boxShadow: "0 8px 20px rgba(0,0,0,0.15)",
+    transition: "0.3s",
+    cursor: "pointer"
+  },
+
+  booksSection: {
+    padding: "40px 20px",
+    background: "linear-gradient(180deg, #f9f6f0, #f9f6f0)"
+  },
+
+  headerRow: {
+    display: "flex",
+    justifyContent: "space-between",
+    marginBottom: "20px"
+  },
+
   viewAll: { color: "#2c77f0", cursor: "pointer" },
-  cards: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "20px" },
-  card: { borderRadius: "10px", overflow: "hidden", background: "#fff", boxShadow: "0 4px 12px rgba(0,0,0,0.1)", transition: "0.3s", cursor: "pointer" },
-  bookImage: { width: "100%", height: "200px", objectFit: "cover" },
-  detailsBtn: { width: "100%", padding: "12px", backgroundColor: "#a87009", color: "#fff", border: "none", cursor: "pointer", fontSize: "14px" },
 
-  ctaSection: { background: "linear-gradient(135deg, #a36008, #e7aa38)", color: "white", padding: "60px 20px", textAlign: "center", width: "100%" },
+  cards: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+    gap: "20px"
+  },
+
+  card: {
+    borderRadius: "10px",
+    overflow: "hidden",
+    background: "#fff",
+    boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+    cursor: "pointer"
+  },
+
+  bookImage: { width: "100%", height: "200px", objectFit: "cover" },
+
+  detailsBtn: {
+    width: "100%",
+    padding: "12px",
+    backgroundColor: "#a87009",
+    color: "#fff",
+    border: "none",
+    fontSize: "14px",
+    cursor: "pointer"
+  },
+
+  ctaSection: {
+    background: "linear-gradient(135deg, #a36008, #e7aa38)",
+    color: "white",
+    padding: "60px 20px",
+    textAlign: "center",
+    width: "100%"
+  },
+
   ctaTitle: { fontSize: "clamp(22px, 4vw, 36px)" },
   ctaText: { marginBottom: "20px" },
-  ctaButtons: { display: "flex", justifyContent: "center", gap: "15px", flexWrap: "wrap" },
-  primaryBtn: { background: "#fff", color: "#976810", border: "none", padding: "12px 25px", borderRadius: "8px", cursor: "pointer" },
-  secondaryBtn: { background: "#8a6732", color: "#fff", border: "none", padding: "12px 25px", borderRadius: "8px", cursor: "pointer" },
+
+  ctaButtons: {
+    display: "flex",
+    justifyContent: "center",
+    gap: "15px",
+    flexWrap: "wrap"
+  },
+
+  primaryBtn: {
+    background: "#fff",
+    color: "#976810",
+    border: "none",
+    padding: "12px 25px",
+    borderRadius: "8px",
+    cursor: "pointer"
+  },
+
+  secondaryBtn: {
+    background: "#8a6732",
+    color: "#fff",
+    border: "none",
+    padding: "12px 25px",
+    borderRadius: "8px",
+    cursor: "pointer"
+  },
 };
 
 export default Home;

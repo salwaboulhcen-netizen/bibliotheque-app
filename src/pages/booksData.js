@@ -1,5 +1,12 @@
 const books = [
   {
+  id: 1,
+  title: "Nom",
+  image: "...",
+  category: "science",
+  available: true
+},
+  {
     id: 1,
     title: "Clean Code",
     author: "Robert C. Martin",
@@ -146,6 +153,7 @@ const books = [
     status: "Disponible",
     image: "https://picsum.photos/200?21",
   }
+  
 ];
 
 export default books;

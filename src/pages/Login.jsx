@@ -138,7 +138,7 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
     height: "100vh",
-    background: "linear-gradient(135deg, #667eea, #764ba2)",
+    background: "linear-gradient(135deg, #f5f6fa, #f5f6fa)",
     fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
   },
   card: {
@@ -182,7 +182,7 @@ const styles = {
     padding: "14px",
     borderRadius: "10px",
     border: "none",
-    background: "linear-gradient(135deg, #667eea, #764ba2)",
+    background: "linear-gradient(135deg, #3d5dc7, #3d5dc7)",
     color: "#fff",
     fontWeight: "600",
     cursor: "pointer",

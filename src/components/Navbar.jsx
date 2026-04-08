@@ -155,7 +155,7 @@ const styles = {
     alignItems: "center",
   },
   logo: {
-    width: "50px",
+    width: "100px",
     marginRight: "10px",
   },
   title: {
