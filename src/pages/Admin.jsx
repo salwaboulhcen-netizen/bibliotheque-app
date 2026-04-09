@@ -1,64 +1,172 @@
+import React, { useState } from "react";
+import booksData from "../data/booksData";
 
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+function Admin() {
+  const [books, setBooks] = useState(booksData);
 
-export default function AdminDashboard() {
-  const [books, setBooks] = useState([]);
-  const [title, setTitle] = useState('');
-  const [author, setAuthor] = useState('');
+  const [newBook, setNewBook] = useState({
+    title: "",
+    author: "",
+    category: "",
+    year: "",
+    image: "",
+    status: "Disponible",
+    description: "",
+  });
 
-  useEffect(() => {
-    fetchBooks();
-  }, []);
+  // ➕ ADD BOOK
+  const addBook = () => {
+    if (!newBook.title || !newBook.author) return;
 
-  const fetchBooks = () => {
-    axios.get('http://127.0.0.1:8000/api/books')
-      .then(res => setBooks(res.data))
-      .catch(err => console.log(err));
+    const book = {
+      id: Date.now(),
+      ...newBook,
+    };
+
+    setBooks([...books, book]);
+
+    setNewBook({
+      title: "",
+      author: "",
+      category: "",
+      year: "",
+      image: "",
+      status: "Disponible",
+      description: "",
+    });
   };
 
-  const handleAddBook = (e) => {
-    e.preventDefault();
-    axios.post('http://127.0.0.1:8000/api/books', { title, author })
-      .then(() => {
-        setTitle('');
-        setAuthor('');
-        fetchBooks();
-      })
-      .catch(err => console.log(err));
-  };
-
-  const handleDeleteBook = (id) => {
-    axios.delete('http://127.0.0.1:8000/api/books/${id}')
-      .then(() => fetchBooks())
-      .catch(err => console.log(err));
+  // ❌ DELETE BOOK
+  const deleteBook = (id) => {
+    setBooks(books.filter((b) => b.id !== id));
   };
 
   return (
-    <div className="container mt-4">
-      <h2>Admin Dashboard</h2>
+    <div style={styles.page}>
+      <h1>📊 Admin Dashboard</h1>
 
-      <form onSubmit={handleAddBook}>
-        <div className="form-group">
-          <label>عنوان الكتاب:</label>
-          <input type="text" className="form-control" value={title} onChange={e => setTitle(e.target.value)} required />
-        </div>
-        <div className="form-group">
-          <label>المؤلف:</label>
-          <input type="text" className="form-control" value={author} onChange={e => setAuthor(e.target.value)} required />
-        </div>
-        <button type="submit" className="btn btn-success mt-2">إضافة كتاب</button>
-      </form>
+      {/* FORM */}
+      <div style={styles.form}>
+        <input
+          placeholder="Titre"
+          value={newBook.title}
+          onChange={(e) =>
+            setNewBook({ ...newBook, title: e.target.value })
+          }
+        />
 
-      <h3 className="mt-4">جميع الكتب</h3>
-      <ul className="list-group">
-        {books.map(book => (
-          <li className="list-group-item d-flex justify-content-between align-items-center" key={book.id}>
-            {book.title} - {book.author}
-            <button className="btn btn-danger btn-sm" onClick={() => handleDeleteBook(book.id)}>حذف</button>
-          </li>
+        <input
+          placeholder="Auteur"
+          value={newBook.author}
+          onChange={(e) =>
+            setNewBook({ ...newBook, author: e.target.value })
+          }
+        />
+
+        <input
+          placeholder="Catégorie"
+          value={newBook.category}
+          onChange={(e) =>
+            setNewBook({ ...newBook, category: e.target.value })
+          }
+        />
+
+        <input
+          placeholder="Année"
+          value={newBook.year}
+          onChange={(e) =>
+            setNewBook({ ...newBook, year: e.target.value })
+          }
+        />
+
+        <input
+          placeholder="Image URL"
+          value={newBook.image}
+          onChange={(e) =>
+            setNewBook({ ...newBook, image: e.target.value })
+          }
+        />
+
+        <textarea
+          placeholder="Description"
+          value={newBook.description}
+          onChange={(e) =>
+            setNewBook({ ...newBook, description: e.target.value })
+          }
+        />
+
+        <button onClick={addBook}>➕ Ajouter Livre</button>
+      </div>
+
+      {/* LIST */}
+      <div style={styles.list}>
+        {books.map((book) => (
+          <div key={book.id} style={styles.card}>
+            <img src={book.image} alt="" style={styles.img} />
+
+            <div>
+              <h3>{book.title}</h3>
+              <p>{book.author}</p>
+              <p>{book.category}</p>
+
+              <button
+                style={styles.deleteBtn}
+                onClick={() => deleteBook(book.id)}
+              >
+                ❌ Supprimer
+              </button>
+            </div>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }
+
+export default Admin;
+
+/* 🎨 STYLE */
+const styles = {
+  page: {
+    padding: "20px",
+    background: "#f5f7fb",
+    minHeight: "100vh",
+  },
+
+  form: {
+    display: "grid",
+    gap: "10px",
+    maxWidth: "500px",
+    marginBottom: "30px",
+  },
+
+  list: {
+    display: "grid",
+    gap: "15px",
+  },
+
+  card: {
+    display: "flex",
+    gap: "15px",
+    background: "white",
+    padding: "10px",
+    borderRadius: "10px",
+    alignItems: "center",
+  },
+
+  img: {
+    width: "80px",
+    height: "100px",
+    objectFit: "cover",
+    borderRadius: "8px",
+  },
+
+  deleteBtn: {
+    background: "red",
+    color: "white",
+    border: "none",
+    padding: "5px 10px",
+    borderRadius: "6px",
+    cursor: "pointer",
+  },
+};

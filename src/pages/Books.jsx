@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import books from "./booksData";
+import books from "../data/booksData";
 
 export default function Catalogue() {
   const navigate = useNavigate();
@@ -414,6 +414,7 @@ export default function Catalogue() {
             font-size: 14px;
           }
         }
+          
       `}</style>
     </div>
   );

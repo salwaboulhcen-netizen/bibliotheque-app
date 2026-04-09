@@ -5,7 +5,6 @@ function Navbar() {
   const [mobileMenu, setMobileMenu] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
-  // Resize handler
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
     window.addEventListener("resize", handleResize);
@@ -18,7 +17,7 @@ function Navbar() {
         {/* Left */}
         <div style={styles.left}>
           <img src="/logo.png" alt="logo" style={styles.logo} />
-          <h2 style={styles.title}>Bibliothèque</h2>
+          
         </div>
 
         {/* Mobile Button */}
@@ -40,9 +39,9 @@ function Navbar() {
               position: isMobile ? "absolute" : "static",
               top: isMobile ? "70px" : "auto",
               right: isMobile ? "20px" : "auto",
-              backgroundColor: isMobile ? "#a87009" : "transparent",
+              backgroundColor: isMobile ? "#ffffff" : "transparent",
               padding: isMobile ? "15px" : "0",
-              boxShadow: isMobile ? "0 5px 15px rgba(0,0,0,0.2)" : "none",
+              boxShadow: isMobile ? "0 5px 15px rgba(0,0,0,0.1)" : "none",
               borderRadius: "10px",
             }}
           >
@@ -89,13 +88,13 @@ function Navbar() {
         )}
       </nav>
 
-      {/* Inline CSS */}
       <style>
         {`
           body { padding-top: 80px; }
 
+          /* Links */
           .nav-link {
-            color: white;
+            color: #4b2e05;
             text-decoration: none;
             font-size: 18px;
             transition: 0.3s;
@@ -103,16 +102,17 @@ function Navbar() {
           }
 
           .nav-link:hover {
-            color: #ffd27f;
+            color: #a87009;
           }
 
           .active-link {
-            color: #ffd27f;
+            color: #a87009;
             font-weight: bold;
           }
 
+          /* Button */
           .nav-button {
-            background-color: #70510f;
+            background-color: #a87009;
             padding: 8px 15px;
             border-radius: 6px;
             color: white;
@@ -123,12 +123,12 @@ function Navbar() {
           }
 
           .nav-button:hover {
-            background-color: #8a6515;
+            background-color: #8a5a05;
           }
 
           .active-button {
-            background-color: #ffd27f;
-            color: #70510f;
+            background-color: #5c3b0c;
+            color: white;
             font-weight: bold;
           }
         `}
@@ -142,34 +142,40 @@ const styles = {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: "20px 50px",
-    backgroundColor: "#a87009",
+    padding: "15px 50px",
+    backgroundColor: "#f5efe6",
+    borderBottom: "1px solid #eee",
     position: "fixed",
     top: 0,
     left: 0,
     width: "100%",
     zIndex: 1000,
   },
+
   left: {
     display: "flex",
     alignItems: "center",
   },
+
   logo: {
-    width: "100px",
-    marginRight: "10px",
+    width: "90px",
+    marginRight: "100px",
   },
+
   title: {
-    color: "white",
+    color: "#5c3b0c",
     margin: 0,
   },
+
   right: {
     display: "flex",
     alignItems: "center",
     gap: "25px",
   },
+
   mobileToggle: {
     fontSize: "28px",
-    color: "white",
+    color: "#5c3b0c",
     cursor: "pointer",
   },
 };

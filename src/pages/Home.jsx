@@ -17,6 +17,15 @@ const books = [
 function Home() {
   const navigate = useNavigate();
 
+  // ✅ state dyal search
+  const [search, setSearch] = React.useState("");
+
+  // ✅ filter books
+  const filteredBooks = books.filter((book) =>
+    book.title.toLowerCase().includes(search.toLowerCase()) ||
+    book.author.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
     <div style={styles.container}>
 
@@ -36,9 +45,14 @@ function Home() {
                 type="text"
                 placeholder="🔍 Rechercher livres, auteurs, genres..."
                 style={styles.heroSearchInput}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
               />
-
-              <button style={styles.heroSearchButton}>
+              <button
+                style={styles.heroSearchButton}
+                onMouseEnter={(e) => (e.target.style.background = "#d97706")}
+                onMouseLeave={(e) => (e.target.style.background = "#af7208")}
+              >
                 Rechercher
               </button>
             </div>
@@ -47,6 +61,8 @@ function Home() {
           <button
             style={styles.exploreBtn}
             onClick={() => navigate("/books")}
+            onMouseEnter={(e) => (e.target.style.background = "#d97706")}
+            onMouseLeave={(e) => (e.target.style.background = "#db9214")}
           >
             Explorer le catalogue
           </button>
@@ -56,29 +72,27 @@ function Home() {
       {/* STATS */}
       <section style={styles.statsCardsSection}>
         <div style={styles.statsCards}>
-          <div style={styles.statCard}>
-            📖 <h2>10,000+</h2>
-            <p>Livres disponibles</p>
-          </div>
-
-          <div style={styles.statCard}>
-            👥 <h2>5,000+</h2>
-            <p>Membres actifs</p>
-          </div>
-
-          <div style={styles.statCard}>
-            📈 <h2>50+</h2>
-            <p>Catégories</p>
-          </div>
-
-          <div style={styles.statCard}>
-            ⏰ <h2>24/7</h2>
-            <p>Accès en ligne</p>
-          </div>
+          {[
+            { icon: "📖", value: "10,000+", label: "Livres disponibles" },
+            { icon: "👥", value: "5,000+", label: "Membres actifs" },
+            { icon: "📚", value: "50+", label: "Catégories" },
+            { icon: "⏰", value: "24/7", label: "Accès en ligne" },
+          ].map((stat, i) => (
+            <div
+              key={i}
+              style={styles.statCard}
+              onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-8px)")}
+              onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
+            >
+              <div style={{ fontSize: "28px" }}>{stat.icon}</div>
+              <h2>{stat.value}</h2>
+              <p>{stat.label}</p>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* BOOKS POPULAR */}
+      {/* BOOKS */}
       <section style={styles.booksSection}>
         <div style={styles.headerRow}>
           <h2>Livres Populaires</h2>
@@ -88,15 +102,22 @@ function Home() {
         </div>
 
         <div style={styles.cards}>
-          {books.map((book) => (
-            <div key={book.id} style={styles.card}>
-              <img src={book.image} style={styles.bookImage} />
+          {filteredBooks.map((book) => (
+            <div
+              key={book.id}
+              style={styles.card}
+              onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
+              onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+            >
+              <img src={book.image} alt="" style={styles.bookImage} />
 
               <button
                 style={styles.detailsBtn}
                 onClick={() => navigate(`/books/${book.id}`)}
+                onMouseEnter={(e) => (e.target.style.background = "#d97706")}
+                onMouseLeave={(e) => (e.target.style.background = "#F59E0B")}
               >
-                Voir plus de détails
+                Voir plus →
               </button>
             </div>
           ))}
@@ -111,11 +132,17 @@ function Home() {
         </p>
 
         <div style={styles.ctaButtons}>
-          <button style={styles.primaryBtn} onClick={() => navigate("/register")}>
+          <button
+            style={styles.primaryBtn}
+            onClick={() => navigate("/register")}
+          >
             S'inscrire maintenant
           </button>
 
-          <button style={styles.secondaryBtn} onClick={() => navigate("/books")}>
+          <button
+            style={styles.secondaryBtn}
+            onClick={() => navigate("/books")}
+          >
             Voir les livres
           </button>
         </div>
@@ -126,15 +153,15 @@ function Home() {
 }
 
 const styles = {
-  container: { fontFamily: "Arial" },
+  container: { fontFamily: "Poppins, sans-serif", background: "#f9f6f0" },
 
-  hero: { position: "relative", height: "70vh" },
+  hero: { position: "relative", height: "75vh" },
 
   heroImg: {
     width: "100%",
     height: "100%",
     objectFit: "cover",
-    filter: "brightness(60%)"
+    filter: "brightness(50%)"
   },
 
   overlay: {
@@ -147,39 +174,33 @@ const styles = {
     width: "90%"
   },
 
-  title: { fontSize: "clamp(28px, 5vw, 48px)" },
-  subtitle: { fontSize: "clamp(14px, 2vw, 20px)", marginBottom: "20px" },
+  title: { fontSize: "clamp(32px, 5vw, 50px)", fontWeight: "600" },
+  subtitle: { fontSize: "clamp(16px, 2vw, 20px)", marginBottom: "20px" },
 
   exploreBtn: {
     marginTop: "20px",
-    padding: "12px 25px",
-    backgroundColor: "#fff",
-    color: "#a87009",
+    padding: "14px 30px",
+    backgroundColor: "#cf9009",
+    color: "#fff",
     border: "none",
-    borderRadius: "5px",
+    borderRadius: "30px",
     cursor: "pointer"
   },
 
   heroSearchContainer: {
     display: "flex",
     justifyContent: "center",
-    marginBottom: "20px",
-    width: "100%",
+    marginBottom: "20px"
   },
 
-  searchWrapper: {
-    position: "relative",
-    width: "100%",
-    maxWidth: "600px",
-  },
+  searchWrapper: { position: "relative", width: "100%", maxWidth: "600px" },
 
   heroSearchInput: {
     width: "100%",
-    padding: "14px 120px 14px 20px",
+    padding: "15px 120px 15px 20px",
     borderRadius: "50px",
     border: "none",
-    fontSize: "14px",
-    outline: "none",
+    boxShadow: "0 5px 20px rgba(0,0,0,0.2)"
   },
 
   heroSearchButton: {
@@ -187,81 +208,77 @@ const styles = {
     right: "5px",
     top: "50%",
     transform: "translateY(-50%)",
-    padding: "10px 18px",
+    padding: "10px 20px",
     borderRadius: "50px",
     border: "none",
-    backgroundColor: "#a87009",
+    backgroundColor: "#bb740a",
     color: "#fff",
-    cursor: "pointer",
-  },
-
-  statsCardsSection: { padding: "20px" },
-
-  statsCards: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-    gap: "20px"
-  },
-
-  statCard: {
-    background: "#fff",
-    padding: "20px",
-    borderRadius: "10px",
-    textAlign: "center",
-    boxShadow: "0 8px 20px rgba(0,0,0,0.15)",
-    transition: "0.3s",
     cursor: "pointer"
   },
 
-  booksSection: {
-    padding: "40px 20px",
-    background: "linear-gradient(180deg, #f9f6f0, #f9f6f0)"
-  },
+  statsCardsSection: { padding: "40px 20px" },
 
-  headerRow: {
-    display: "flex",
-    justifyContent: "space-between",
-    marginBottom: "20px"
-  },
-
-  viewAll: { color: "#2c77f0", cursor: "pointer" },
-
-  cards: {
+  statsCards: {
     display: "grid",
     gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
     gap: "20px"
   },
 
-  card: {
-    borderRadius: "10px",
-    overflow: "hidden",
+  statCard: {
     background: "#fff",
-    boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-    cursor: "pointer"
+    padding: "25px",
+    borderRadius: "15px",
+    textAlign: "center",
+    boxShadow: "0 10px 25px rgba(0,0,0,0.1)",
+    cursor: "pointer",
+    transition: "0.3s"
   },
 
-  bookImage: { width: "100%", height: "200px", objectFit: "cover" },
+  booksSection: { padding: "50px 20px" },
+
+  headerRow: {
+    display: "flex",
+    justifyContent: "space-between",
+    marginBottom: "25px"
+  },
+
+  viewAll: { color: "#c7952b", cursor: "pointer", fontWeight: "bold" },
+
+  cards: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+    gap: "25px"
+  },
+
+  card: {
+    borderRadius: "15px",
+    overflow: "hidden",
+    background: "#fff",
+    boxShadow: "0 10px 25px rgba(0,0,0,0.1)",
+    transition: "0.3s"
+  },
+
+  bookImage: { width: "100%", height: "220px", objectFit: "cover" },
 
   detailsBtn: {
     width: "100%",
-    padding: "12px",
-    backgroundColor: "#a87009",
+    padding: "14px",
+    backgroundColor: "#ddab3e",
     color: "#fff",
     border: "none",
-    fontSize: "14px",
     cursor: "pointer"
   },
 
   ctaSection: {
-    background: "linear-gradient(135deg, #a36008, #e7aa38)",
+    background: "linear-gradient(135deg, #d1921c, #ac7414)",
     color: "white",
-    padding: "60px 20px",
-    textAlign: "center",
-    width: "100%"
+    padding: "70px 20px",
+    textAlign: "center"
   },
 
-  ctaTitle: { fontSize: "clamp(22px, 4vw, 36px)" },
-  ctaText: { marginBottom: "20px" },
+  ctaTitle: { fontSize: "clamp(24px, 4vw, 38px)" },
+
+  ctaText: { marginBottom: "25px" },
 
   ctaButtons: {
     display: "flex",
@@ -272,21 +289,21 @@ const styles = {
 
   primaryBtn: {
     background: "#fff",
-    color: "#976810",
+    color: "#8b5300",
     border: "none",
-    padding: "12px 25px",
-    borderRadius: "8px",
+    padding: "14px 28px",
+    borderRadius: "30px",
     cursor: "pointer"
   },
 
   secondaryBtn: {
-    background: "#8a6732",
+    background: "transparent",
+    border: "2px solid #fff",
     color: "#fff",
-    border: "none",
-    padding: "12px 25px",
-    borderRadius: "8px",
+    padding: "14px 28px",
+    borderRadius: "30px",
     cursor: "pointer"
-  },
+  }
 };
 
 export default Home;
