@@ -5,20 +5,20 @@ import books from "../data/booksData";
 export default function Catalogue() {
   const navigate = useNavigate();
 
+  const user = JSON.parse(localStorage.getItem("user"));
+
   const [search, setSearch] = useState("");
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("all");
   const [availability, setAvailability] = useState("all");
-
   const [currentPage, setCurrentPage] = useState(1);
+
   const booksPerPage = 6;
 
-  // 🔍 FILTER
+  // FILTER
   const filteredBooks = books.filter((b) => {
     const matchSearch = b.title.toLowerCase().includes(query.toLowerCase());
-
-    const matchCategory =
-      category === "all" || b.category === category;
+    const matchCategory = category === "all" || b.category === category;
 
     const matchAvailability =
       availability === "all" ||
@@ -28,7 +28,7 @@ export default function Catalogue() {
     return matchSearch && matchCategory && matchAvailability;
   });
 
-  // 📄 PAGINATION
+  // PAGINATION
   const indexOfLast = currentPage * booksPerPage;
   const indexOfFirst = indexOfLast - booksPerPage;
   const currentBooks = filteredBooks.slice(indexOfFirst, indexOfLast);
@@ -52,6 +52,12 @@ export default function Catalogue() {
         <div className="header-card">
           <h1>Catalogue des Livres</h1>
 
+          {!user && (
+            <p style={{ color: "#888" }}>
+              Connectez-vous pour voir la disponibilité des livres
+            </p>
+          )}
+
           <div className="search-wrapper">
             <input
               type="text"
@@ -66,7 +72,7 @@ export default function Catalogue() {
                 setCurrentPage(1);
               }}
             >
-              Rechercher 
+              Rechercher
             </button>
           </div>
         </div>
@@ -79,10 +85,8 @@ export default function Catalogue() {
         <div className="sidebar">
           <h3>Filtres</h3>
 
-          {/* CATEGORY */}
           <div className="filter-group">
             <p>Catégorie</p>
-
             {categories.map((cat) => (
               <label key={cat}>
                 <input
@@ -99,19 +103,14 @@ export default function Catalogue() {
             ))}
           </div>
 
-          {/* AVAILABILITY */}
           <div className="filter-group">
             <p>Disponibilité</p>
 
             <label>
               <input
                 type="radio"
-                name="dispo"
                 checked={availability === "all"}
-                onChange={() => {
-                  setAvailability("all");
-                  setCurrentPage(1);
-                }}
+                onChange={() => setAvailability("all")}
               />
               Tous
             </label>
@@ -119,12 +118,8 @@ export default function Catalogue() {
             <label>
               <input
                 type="radio"
-                name="dispo"
                 checked={availability === "available"}
-                onChange={() => {
-                  setAvailability("available");
-                  setCurrentPage(1);
-                }}
+                onChange={() => setAvailability("available")}
               />
               Disponible
             </label>
@@ -132,12 +127,8 @@ export default function Catalogue() {
             <label>
               <input
                 type="radio"
-                name="dispo"
                 checked={availability === "unavailable"}
-                onChange={() => {
-                  setAvailability("unavailable");
-                  setCurrentPage(1);
-                }}
+                onChange={() => setAvailability("unavailable")}
               />
               Non disponible
             </label>
@@ -165,9 +156,13 @@ export default function Catalogue() {
             {currentBooks.length > 0 ? (
               currentBooks.map((book) => (
                 <div className="card" key={book.id}>
-                  <span className={`badge ${book.available ? "green" : "red"}`}>
-                    {book.available ? "Disponible" : "Emprunté"}
-                  </span>
+
+                  {/* BADGE ONLY IF LOGGED IN */}
+                  {user && (
+                    <span className={`badge ${book.available ? "green" : "red"}`}>
+                      {book.available ? "Disponible" : "Emprunté"}
+                    </span>
+                  )}
 
                   <img src={book.image} alt={book.title} />
 
@@ -222,39 +217,29 @@ export default function Catalogue() {
           font-family: Arial;
         }
 
-        /* HEADER CARD */
         .header-card {
-          background: white;
-          padding: 20px;
-          border-radius: 12px;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-
+          background: linear-gradient(135deg,#fff,#f7f7f7);
+          padding: 25px;
+          border-radius: 15px;
+          box-shadow: 0 8px 25px rgba(0,0,0,0.08);
           width: 100%;
-          margin: 0;
-
           display: flex;
           flex-direction: column;
           gap: 15px;
           align-items: center;
         }
 
-        .header-card h1 {
-          margin: 0;
-        }
-
-        /* SEARCH BAR */
         .search-wrapper {
           display: flex;
           width: 100%;
-          max-width: 700px;
-          border: 1px solid #ccc;
-          border-radius: 30px;
+          border-radius: 50px;
           overflow: hidden;
+          box-shadow: 0 4px 15px rgba(0,0,0,0.08);
         }
 
         .search-wrapper input {
           flex: 1;
-          padding: 14px 18px;
+          padding: 16px;
           border: none;
           outline: none;
         }
@@ -263,56 +248,25 @@ export default function Catalogue() {
           background: #4f6df5;
           color: white;
           border: none;
-          padding: 0 20px;
+          padding: 0 25px;
           cursor: pointer;
         }
 
-        .search-wrapper button:hover {
-          background: #3b55d1;
-        }
-
-        /* LAYOUT */
         .layout {
           display: flex;
           gap: 20px;
-          align-items: flex-start;
           margin-top: 30px;
         }
 
-        /* SIDEBAR */
         .sidebar {
           width: 250px;
           background: white;
           padding: 20px;
           border-radius: 12px;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
-        .filter-group {
-          margin-bottom: 20px;
-        }
-
-        .sidebar label {
-          display: block;
-          margin: 5px 0;
-        }
-
-        .reset {
-          width: 100%;
-          padding: 10px;
-          border: none;
-          background: #eee;
-          border-radius: 8px;
-          cursor: pointer;
-        }
-
-        /* CONTENT */
         .content {
           flex: 1;
-        }
-
-        .count {
-          margin-bottom: 15px;
         }
 
         .grid {
@@ -326,7 +280,6 @@ export default function Catalogue() {
           border-radius: 12px;
           overflow: hidden;
           position: relative;
-          box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
         .card img {
@@ -338,14 +291,9 @@ export default function Catalogue() {
         .details-btn {
           width: 100%;
           padding: 10px;
-          border: none;
           background: #c58a2b;
           color: white;
-          cursor: pointer;
-        }
-
-        .details-btn:hover {
-          background: #e6c378;
+          border: none;
         }
 
         .badge {
@@ -361,7 +309,6 @@ export default function Catalogue() {
         .green { background: green; }
         .red { background: red; }
 
-        /* PAGINATION */
         .pagination {
           display: flex;
           justify-content: center;
@@ -374,12 +321,6 @@ export default function Catalogue() {
           border: none;
           background: #eee;
           cursor: pointer;
-          border-radius: 6px;
-        }
-
-        .pagination button:hover {
-          background: #4f6df5;
-          color: white;
         }
 
         .pagination .active {
@@ -387,17 +328,7 @@ export default function Catalogue() {
           color: white;
         }
 
-        .pagination button:disabled {
-          opacity: 0.5;
-          cursor: not-allowed;
-        }
-
-        /* 📱 RESPONSIVE MOBILE */
         @media (max-width: 768px) {
-          .header-card {
-            width: 95%;
-          }
-
           .layout {
             flex-direction: column;
           }
@@ -405,16 +336,7 @@ export default function Catalogue() {
           .sidebar {
             width: 100%;
           }
-
-          .search-wrapper {
-            flex-direction: row;
-          }
-
-          .search-wrapper input {
-            font-size: 14px;
-          }
         }
-          
       `}</style>
     </div>
   );

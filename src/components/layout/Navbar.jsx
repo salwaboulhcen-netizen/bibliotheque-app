@@ -14,13 +14,12 @@ function Navbar() {
   return (
     <>
       <nav style={styles.nav}>
-        {/* Left */}
+        {/* LEFT */}
         <div style={styles.left}>
           <img src="/logo.png" alt="logo" style={styles.logo} />
-          
         </div>
 
-        {/* Mobile Button */}
+        {/* MOBILE BUTTON */}
         {isMobile && (
           <div
             style={styles.mobileToggle}
@@ -30,7 +29,7 @@ function Navbar() {
           </div>
         )}
 
-        {/* Links */}
+        {/* LINKS */}
         {(mobileMenu || !isMobile) && (
           <div
             style={{
@@ -88,13 +87,16 @@ function Navbar() {
         )}
       </nav>
 
+      {/* CSS */}
       <style>
         {`
-          body { padding-top: 80px; }
+          body {
+            padding-top: 83px; 
+          }
 
-          /* Links */
+          /* LINKS */
           .nav-link {
-            color: #4b2e05;
+            color: #5c3b0c;
             text-decoration: none;
             font-size: 18px;
             transition: 0.3s;
@@ -110,7 +112,7 @@ function Navbar() {
             font-weight: bold;
           }
 
-          /* Button */
+          /* BUTTON */
           .nav-button {
             background-color: #a87009;
             padding: 8px 15px;
@@ -143,13 +145,17 @@ const styles = {
     justifyContent: "space-between",
     alignItems: "center",
     padding: "15px 50px",
-    backgroundColor: "#f5efe6",
-    borderBottom: "1px solid #eee",
+    backgroundColor: "#ddcfb6",
+    borderBottom: "1px solid #d8c7ab",
+
     position: "fixed",
-    top: 0,
+    top: "39px", // 👈 قرب من TopBar (بدلها إذا بغيتي)
     left: 0,
     width: "100%",
     zIndex: 1000,
+
+    boxSizing: "border-box",
+    boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
   },
 
   left: {
@@ -158,13 +164,7 @@ const styles = {
   },
 
   logo: {
-    width: "90px",
-    marginRight: "100px",
-  },
-
-  title: {
-    color: "#5c3b0c",
-    margin: 0,
+    width: "80px",
   },
 
   right: {

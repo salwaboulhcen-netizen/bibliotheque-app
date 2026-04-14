@@ -33,9 +33,9 @@ export default function Footer() {
         {/* Right Section */}
         <div style={styles.column}>
           <h3 style={styles.title}>Contact</h3>
-          <p><FaMapMarkerAlt /> 123 Avenue Universitaire, Paris</p>
-          <p><FaPhone /> +33 1 23 45 67 89</p>
-          <p><FaEnvelope /> contact@bibliotheque.fr</p>
+          <p><FaMapMarkerAlt /> Morocco,Marrakech</p>
+          <p><FaPhone /> +121687272581</p>
+          <p><FaEnvelope /> salwaboulhcen@gmail.com</p>
         </div>
 
       </div>
