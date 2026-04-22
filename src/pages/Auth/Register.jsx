@@ -45,6 +45,7 @@ export default function Register() {
         <div className="card">
           <div className="logo"> <span>Bibliothèque</span></div>
           <h2>Créer un compte</h2>
+
           <form onSubmit={handleRegister}>
             <label>Nom complet *</label>
             <input
@@ -113,10 +114,13 @@ export default function Register() {
           </form>
 
           <p className="login-link">
-            Déjà inscrit ? <span onClick={() => navigate("/login")}>Se connecter</span>
+            Déjà inscrit ?{" "}
+            <span onClick={() => navigate("/login")}>Se connecter</span>
           </p>
 
-          <p className="back" onClick={() => navigate("/")}>← Retour à l'accueil</p>
+          <p className="back" onClick={() => navigate("/")}>
+            ← Retour à l'accueil
+          </p>
         </div>
       </div>
 
@@ -124,30 +128,30 @@ export default function Register() {
         body {
           margin: 0;
           font-family: Arial, sans-serif;
-          background: #f5f6fa;
         }
 
         .register-container {
           display: flex;
           justify-content: center;
           align-items: center;
-          min-height: calc(100vh - 120px); /* خصم مساحة Navbar + Footer */
-          padding: 40px 20px; /* مسافة أعلى وأسفل لتجنب الالتصاق */
-          box-sizing: border-box;
+          min-height: 100vh;
+          background: linear-gradient(135deg, #5c3a1e, #a67c52, #e6c378);
+          padding: 20px;
         }
 
         .card {
-          background: white;
+          background: rgba(255,255,255,0.15);
+          backdrop-filter: blur(12px);
           padding: 30px;
-          width: 400px;
-          border-radius: 10px;
-          box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+          width: 420px;
+          border-radius: 15px;
+          box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+          color: white;
         }
 
         .logo {
           text-align: center;
-          font-size: 22px;
-          color: #3b5ed7;
+          font-size: 24px;
           margin-bottom: 10px;
         }
 
@@ -168,11 +172,16 @@ export default function Register() {
 
         input {
           width: 100%;
-          padding: 10px;
+          padding: 12px;
           margin-top: 5px;
-          border: 1px solid #ddd;
-          border-radius: 6px;
+          border-radius: 8px;
+          border: none;
           outline: none;
+          background: rgba(255,255,255,0.9);
+        }
+
+        input:focus {
+          box-shadow: 0 0 0 2px #e6c378;
         }
 
         .row {
@@ -188,16 +197,18 @@ export default function Register() {
           width: 100%;
           margin-top: 20px;
           padding: 12px;
-          background: #3b5ed7;
-          color: white;
+          background: #e6c378;
+          color: #5c3a1e;
           border: none;
-          border-radius: 6px;
+          border-radius: 8px;
           font-weight: bold;
           cursor: pointer;
+          transition: 0.3s;
         }
 
         button:hover {
-          background: #2f4cc0;
+          background: #d4a94f;
+          transform: scale(1.03);
         }
 
         .login-link {
@@ -206,15 +217,23 @@ export default function Register() {
         }
 
         .login-link span {
-          color: #3b5ed7;
+          color: #ffe4a3;
           cursor: pointer;
+        }
+
+        .login-link span:hover {
+          text-decoration: underline;
         }
 
         .back {
           text-align: center;
           margin-top: 10px;
-          color: gray;
+          color: #ddd;
           cursor: pointer;
+        }
+
+        .back:hover {
+          color: white;
         }
       `}</style>
     </>

@@ -1,30 +1,40 @@
-import React from "react";
+import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-
-const books = [
-  { id: 1, title: "Les Misérables", author: "Victor Hugo", category: "Littérature", image: "https://images.unsplash.com/photo-1512820790803-83ca734da794" },
-  { id: 2, title: "Physique Quantique", author: "Marie Curie", category: "Physique", image: "https://images.unsplash.com/photo-1509228627152-72ae9ae6848d" },
-  { id: 3, title: "Algèbre Linéaire", author: "Gilbert Strang", category: "Mathématiques", image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b" },
-  { id: 4, title: "Introduction à l’Algorithmique", author: "Thomas H. Cormen", category: "Informatique", image: "https://images.unsplash.com/photo-1518779578993-ec3579fee39f" },
-  { id: 5, title: "Philosophie Moderne", author: "Descartes", category: "Philosophie", image: "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f" },
-  { id: 6, title: "Clean Code", author: "Robert C. Martin", category: "Programmation", image: "https://images.unsplash.com/photo-1519681393784-d120267933ba" },
-  { id: 7, title: "Analyse Mathématique", author: "Jean Dieudonné", category: "Mathématiques", image: "https://images.unsplash.com/photo-1495446815901-a7297e633e8d" },
-  { id: 8, title: "Intelligence Artificielle", author: "Stuart Russell", category: "Informatique", image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c" },
-  { id: 9, title: "Mécanique Classique", author: "Isaac Newton", category: "Physique", image: "https://images.unsplash.com/photo-1521587760476-6c12a4b040da" },
-  { id: 10, title: "Logique et Raisonnement", author: "Aristote", category: "Philosophie", image: "https://images.unsplash.com/photo-1516979187457-637abb4f9353" },
-];
-
+import books from "../data/booksData";
 function Home() {
   const navigate = useNavigate();
 
   // ✅ state dyal search
-  const [search, setSearch] = React.useState("");
+  const [search, setSearch] = useState("");
 
   // ✅ filter books
+  
   const filteredBooks = books.filter((book) =>
     book.title.toLowerCase().includes(search.toLowerCase()) ||
     book.author.toLowerCase().includes(search.toLowerCase())
   );
+   // 👇 refs خاصين بكل category
+  const scrollRefs = useRef({});
+
+  const scroll = (cat, dir) => {
+    const amount = 300;
+
+    if (scrollRefs.current[cat]) {
+      scrollRefs.current[cat].scrollBy({
+        left: dir === "left" ? -amount : amount,
+        behavior: "smooth",
+      });
+    }
+  };
+
+  const genre = [
+    "Informatique",
+    "Science",
+    "Fiction",
+    "Histoire",
+    "Littérature",
+  ];
+
 
   return (
     <div style={styles.container}>
@@ -92,38 +102,63 @@ function Home() {
         </div>
       </section>
 
-      {/* BOOKS */}
-      <section style={styles.booksSection}>
-        <div style={styles.headerRow}>
-          <h2>Livres Populaires</h2>
-          <span onClick={() => navigate("/books")} style={styles.viewAll}>
-            Voir tout →
-          </span>
-        </div>
 
-        <div style={styles.cards}>
-          {filteredBooks.map((book) => (
-            <div
-              key={book.id}
-              style={styles.card}
-              onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
-              onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
-            >
-              <img src={book.image} alt="" style={styles.bookImage} />
+      {/* BOOKS BY CATEGORY */}
+      <section style={styles.booksSection}>
+        {genre.map((cat, index) => {
+          const booksByCat = filteredBooks.filter((book) =>
+            book.genre?.toLowerCase().includes(cat.toLowerCase())
+          );
+
+          return (
+            <div key={index} style={{ marginBottom: "40px", position: "relative" }}>
+
+              {/* HEADER */}
+              <div style={styles.headerRow}>
+                <h2>{cat}</h2>
+              </div>
+
+              {/* ARROWS */}
+              <button
+                onClick={() => scroll(cat, "left")}
+                style={{ ...styles.arrow, left: "0" }}
+              >
+                ◀
+              </button>
 
               <button
-                style={styles.detailsBtn}
-                onClick={() => navigate(`/books/${book.id}`)}
-                onMouseEnter={(e) => (e.target.style.background = "#d97706")}
-                onMouseLeave={(e) => (e.target.style.background = "#F59E0B")}
+                onClick={() => scroll(cat, "right")}
+                style={{ ...styles.arrow, right: "0" }}
               >
-                Voir plus →
+                ▶
               </button>
-            </div>
-          ))}
-        </div>
-      </section>
 
+              {/* CAROUSEL */}
+              <div
+                ref={(el) => (scrollRefs.current[cat] = el)}
+                style={styles.carousel}
+              >
+                {booksByCat.length > 0 ? (
+                  booksByCat.map((book) => (
+                    <div key={book.id} style={styles.card}>
+                      <img src={book.image} alt="" style={styles.bookImage} />
+
+                      <button
+                        style={styles.detailsBtn}
+                        onClick={() => navigate(`/books/${book.id}`)}
+                      >
+                        Voir plus →
+                      </button>
+                    </div>
+                  ))
+                ) : (
+                  <p>Aucun livre</p>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </section>
       {/* CTA */}
       <div style={styles.ctaSection}>
         <h2 style={styles.ctaTitle}>Prêt à commencer ?</h2>
@@ -200,6 +235,7 @@ const styles = {
     padding: "15px 120px 15px 20px",
     borderRadius: "50px",
     border: "none",
+    color: "#0e0d0d",
     boxShadow: "0 5px 20px rgba(0,0,0,0.2)"
   },
 
@@ -241,7 +277,27 @@ const styles = {
     justifyContent: "space-between",
     marginBottom: "25px"
   },
+carousel: {
+  display: "flex",
+  gap: "25px",
+  overflowX: "auto",
+  scrollBehavior: "x mandatory",
+  padding: "20px 10px",
+},
 
+arrow: {
+  position: "absolute",
+  top: "50%",
+  transform: "translateY(-50%)",
+  background: "#00000088",
+  color: "#fff",
+  border: "none",
+  borderRadius: "50%",
+  width: "35px",
+  height: "35px",
+  cursor: "pointer",
+  zIndex: 10,
+},
   viewAll: { color: "#c7952b", cursor: "pointer", fontWeight: "bold" },
 
   cards: {
@@ -251,15 +307,20 @@ const styles = {
   },
 
   card: {
-    borderRadius: "15px",
-    overflow: "hidden",
-    background: "#fff",
-    boxShadow: "0 10px 25px rgba(0,0,0,0.1)",
-    transition: "0.3s"
-  },
+     minWidth: "200px",
+  background: "#fff",
+  borderRadius: "15px",
+  overflow: "hidden",
+  boxShadow: "0 8px 20px rgba(0,0,0,0.1)",
+  flexShrink: 0,
+   scrollSnapAlign: "start",
+},
 
-  bookImage: { width: "100%", height: "220px", objectFit: "cover" },
-
+  bookImage: { 
+    width: "100%", 
+    height: "220px", 
+    objectFit: "cover" },
+    diplaylay:"block",
   detailsBtn: {
     width: "100%",
     padding: "14px",
@@ -304,6 +365,7 @@ const styles = {
     borderRadius: "30px",
     cursor: "pointer"
   }
+  
 };
 
 export default Home;

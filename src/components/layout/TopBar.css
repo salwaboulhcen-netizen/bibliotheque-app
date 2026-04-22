@@ -13,7 +13,7 @@
   height: 38px;
   z-index: 1100;
   box-shadow: 0 6px 18px rgba(0,0,0,0.13);
-  margin-bottom: 12px; /* Add spacing below topbar */
+  margin-bottom: 102px; /* Add spacing below topbar */
   gap: 0;
 }
 

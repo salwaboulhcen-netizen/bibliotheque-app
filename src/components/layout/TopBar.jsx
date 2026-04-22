@@ -1,7 +1,8 @@
 import React from "react";
 import "./TopBar.css";
-
+import { useTranslation } from "react-i18next";
 const TopBar = () => {
+  const {i18n } = useTranslation();
   return (
     <div className="topbar">
       <div className="topbar-left">
@@ -40,7 +41,7 @@ const TopBar = () => {
         >
           <i className="fab fa-instagram"></i>
         </a>
-        <select className="topbar-lang">
+        <select className="topbar-lang" onChange={(e) => i18n.changeLanguage(e.target.value)}>
           <option value="fr">Français</option>
           <option value="en">English</option>
           <option value="ar">العربية</option>
@@ -51,3 +52,4 @@ const TopBar = () => {
 };
 
 export default TopBar;
+

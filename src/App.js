@@ -15,6 +15,10 @@ import Register from "./pages/Auth/Register";
 import Admin from "./pages/Admin";
 import AdminRoute from "./routes/AdminRoute";
 
+import User from "./pages/User";
+
+
+
 function App() {
   return (
     <Router>
@@ -30,6 +34,12 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
+          <Route path="/" element={<Login />} />
+          <Route path="/admin" element={<Admin />} />
+          <Route path="/user" element={<User />} />
+
+
+
           <Route path="/admin" element={
             <AdminRoute>
               <Admin />
@@ -42,5 +52,6 @@ function App() {
     </Router>
   );
 }
+
 
 export default App;
