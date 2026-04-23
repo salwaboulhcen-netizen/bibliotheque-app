@@ -8,7 +8,10 @@ const [books, setBooks] = useState([]);
 useEffect(() => {
   fetch("http://localhost:8000/api/books")
     .then((res) => res.json())
-    .then((data) => setBooks(data))
+    .then((data) => {
+      console.log(data); 
+      setBooks(data);
+    })
     .catch((err) => console.log(err));
 }, []);
   // ✅ state dyal search
@@ -200,10 +203,13 @@ const styles = {
   hero: { position: "relative", height: "75vh" },
 
   heroImg: {
+      
     width: "100%",
     height: "100%",
     objectFit: "cover",
-    filter: "brightness(50%)"
+    filter: "brightness(50%)",
+    
+   
   },
 
   overlay: {
