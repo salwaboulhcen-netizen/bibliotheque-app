@@ -1,6 +1,5 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import books from "../data/booksData";
 
 function BookDetail() {
   const { id } = useParams();
@@ -8,7 +7,24 @@ function BookDetail() {
   const [search, setSearch] = useState("");
   const isLoggedIn = localStorage.getItem("user");
 
-  const book = useMemo(() => books.find((b) => String(b.id) === String(id)), [id]);
+
+
+const [books, setBooks] = useState([]);
+  useEffect(() => {
+  fetch("http://localhost:8000/api/books")
+    .then((res) => res.json())
+    .then((data) => setBooks(data))
+    .catch((err) => console.log(err));
+}, []);
+
+
+
+
+
+ const book = useMemo(
+  () => books.find((b) => String(b.id) === String(id)),
+  [books, id]
+);
 
   const searchResults = useMemo(() => {
     if (!search.trim()) return books;
@@ -21,13 +37,16 @@ function BookDetail() {
   }, [search]);
 
   const relatedBooks = useMemo(() => {
-    if (!book) return [];
-    const filtered = books.filter(
-      (b) => b.category === book.category && String(b.id) !== String(book.id)
-    );
-    if (filtered.length > 0) return filtered;
-    return books.filter((b) => String(b.id) !== String(book.id)).slice(0, 8);
-  }, [book]);
+  if (!book) return [];
+
+  const filtered = books.filter(
+    (b) => b.genre === book.genre && String(b.id) !== String(book.id)
+  );
+
+  if (filtered.length > 0) return filtered;
+
+  return books.filter((b) => String(b.id) !== String(book.id)).slice(0, 8);
+}, [books, book]);
 
   const handleBorrow = () => {
     if (!isLoggedIn) {
@@ -84,7 +103,7 @@ function BookDetail() {
 
           {!isLoggedIn && (
             <p className="warning">
-               خاصك تسجل الدخول باش تمارس الإعارة
+              Vous devez vous connecter pour utiliser le service de prêt.
             </p>
           )}
         </div>

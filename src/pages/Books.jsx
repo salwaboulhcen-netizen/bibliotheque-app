@@ -1,10 +1,20 @@
-import React, { useState, useEffect } from "react";
+
 import { useNavigate } from "react-router-dom";
-import books from "../data/booksData";
+import React, { useState, useEffect } from "react";
 
 export default function Catalogue() {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
+
+const [books, setBooks] = useState([]);
+  useEffect(() => {
+  fetch("http://localhost:8000/api/books")
+    .then((res) => res.json())
+    .then((data) => setBooks(data))
+    .catch((err) => console.log(err));
+}, []);
+
+
 
   const [search, setSearch] = useState("");
   const [tempSearch, setTempSearch] = useState("");

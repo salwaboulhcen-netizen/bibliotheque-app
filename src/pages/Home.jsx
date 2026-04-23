@@ -1,9 +1,16 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import books from "../data/booksData";
+
 function Home() {
   const navigate = useNavigate();
+const [books, setBooks] = useState([]);
 
+useEffect(() => {
+  fetch("http://localhost:8000/api/books")
+    .then((res) => res.json())
+    .then((data) => setBooks(data))
+    .catch((err) => console.log(err));
+}, []);
   // ✅ state dyal search
   const [search, setSearch] = useState("");
 
