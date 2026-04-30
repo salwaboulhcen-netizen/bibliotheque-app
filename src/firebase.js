@@ -20,3 +20,6 @@ export const auth = getAuth(app);
 
 // Google Provider
 export const googleProvider = new GoogleAuthProvider();
+
+
+

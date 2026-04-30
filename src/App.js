@@ -16,6 +16,8 @@ import Admin from "./pages/Admin";
 import AdminRoute from "./routes/AdminRoute";
 
 import User from "./pages/User";
+import Livres from "./pages/livres";
+
 
 
 
@@ -38,13 +40,15 @@ function App() {
           <Route path="/admin" element={<Admin />} />
           <Route path="/user" element={<User />} />
 
-
+<Route path="/livres" element={<Livres />} />
 
           <Route path="/admin" element={
             <AdminRoute>
               <Admin />
             </AdminRoute>
           } />
+
+
         </Routes>
 
         <Footer />

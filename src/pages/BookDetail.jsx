@@ -38,6 +38,9 @@ const [books, setBooks] = useState([]);
 
   const relatedBooks = useMemo(() => {
   if (!book) return [];
+if (books.length === 0) {
+  return <h2>Loading...</h2>;
+}
 
   const filtered = books.filter(
     (b) => b.genre === book.genre && String(b.id) !== String(book.id)

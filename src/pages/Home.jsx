@@ -67,14 +67,18 @@ useEffect(() => {
                 style={styles.heroSearchInput}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
+                onKeyDown={(e) => {
+    if (e.key === "Enter") {
+      navigate(`livres?search=${search}`);
+    }
+  }}
               />
               <button
-                style={styles.heroSearchButton}
-                onMouseEnter={(e) => (e.target.style.background = "#d97706")}
-                onMouseLeave={(e) => (e.target.style.background = "#af7208")}
-              >
-                Rechercher
-              </button>
+  style={styles.heroSearchButton}
+  onClick={() => navigate(`/livres?search=${search}`)}
+>
+  Rechercher
+</button>
             </div>
           </div>
 

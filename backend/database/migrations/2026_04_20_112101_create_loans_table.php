@@ -11,10 +11,24 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('loans', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
+       Schema::create('loans', function (Blueprint $table) {
+    $table->id();
+
+    $table->foreignId('user_id')
+          ->constrained()
+          ->cascadeOnDelete();
+
+    $table->foreignId('book_id')
+          ->constrained()
+          ->cascadeOnDelete();
+
+    $table->date('date_emprunt');
+    $table->date('date_retour')->nullable();
+
+    $table->enum('status', ['en_cours', 'retourne', 'retard']);
+
+    $table->timestamps();
+});
     }
 
     /**

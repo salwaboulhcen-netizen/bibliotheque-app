@@ -10,10 +10,18 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::get('/admins', [AdminController::class, 'index']);
 Route::post('/admins', [AdminController::class, 'store']);
 
+
+Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback']);
+
 Route::get('/books', [BookController::class, 'index']);
 Route::post('/books', [BookController::class, 'store']);
 Route::delete('/books/{id}', [BookController::class, 'destroy']);
 // Example of a protected route
 Route::middleware('auth:sanctum')->get('/user', function (\Illuminate\Http\Request $request) {
     return $request->user();
+});
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
 });

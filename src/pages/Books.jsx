@@ -27,22 +27,28 @@ const [books, setBooks] = useState([]);
 
   // ✅ FILTER
   const filteredBooks = books.filter((b) => {
-    const matchSearch =
-      search.trim() === "" ||
-      b.title?.toLowerCase().includes(search.toLowerCase());
+  const title = b.title || "";
+  const author = b.author || "";
+  const bookCategory = b.category || "";
 
-    const matchCategory =
-      category === "all" ||
-      (b.category &&
-        b.category.toLowerCase() === category.toLowerCase());
+  const matchSearch =
+    search.trim() === "" ||
+    title.toLowerCase().includes(search.toLowerCase()) ||
+    author.toLowerCase().includes(search.toLowerCase()) ||
+    bookCategory.toLowerCase().includes(search.toLowerCase());
 
-    const matchAvailability =
-      availability === "all" ||
-      (availability === "available" && b.available === true) ||
-      (availability === "unavailable" && b.available === false);
+const matchCategory =
+  category === "all" ||
+  (b.category || "").toLowerCase().trim() === category.toLowerCase().trim();
 
-    return matchSearch && matchCategory && matchAvailability;
-  });
+
+
+  const matchAvailability =
+  availability === "all" ||
+  (availability === "available" && (b.available === true || b.available == 1)) ||
+  (availability === "unavailable" && (b.available === false || b.available == 0));
+  return matchSearch && matchCategory && matchAvailability;
+});
 
   // ✅ PAGINATION
   const indexOfLast = currentPage * booksPerPage;
@@ -64,14 +70,22 @@ const [books, setBooks] = useState([]);
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
-
+useEffect(() => {
+  fetch("http://localhost:8000/api/books")
+    .then((res) => res.json())
+    .then((data) => {
+      console.log(data);
+      setBooks(data);
+    })
+    .catch((err) => console.log(err));
+}, []);
   useEffect(() => {
     setCurrentPage(1);
   }, [search, category, availability]);
 
   return (
     <div className="page">
-
+  
       {/* HEADER */}
       <div className="header">
         <h1> Catalogue des Livres</h1>
@@ -79,16 +93,14 @@ const [books, setBooks] = useState([]);
         {/* SEARCH */}
         <div className="searchBox">
           <input
-            type="text"
-            placeholder="Rechercher un livre..."
-            value={tempSearch}
-            onChange={(e) => setTempSearch(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                setSearch(tempSearch);
-              }
-            }}
-          />
+  type="text"
+  placeholder="Rechercher un livre..."
+  value={tempSearch}
+  onChange={(e) => {
+    setTempSearch(e.target.value);
+    setSearch(e.target.value); // 🔥 real-time search
+  }}
+/>
 
           <button
             onClick={() => setSearch(tempSearch)}
@@ -202,7 +214,7 @@ const [books, setBooks] = useState([]);
                   <button
                     onClick={() => {
                       if (!user) {
-                        alert("🔒 خاصك تسجيل الدخول");
+                        alert(" connectes le site 🔒");
                         navigate("/login");
                         return;
                       }
@@ -288,14 +300,17 @@ const [books, setBooks] = useState([]);
           
         }
 
-        .searchBox input{
-          flex:1;
-          padding:12px;
-          border:none;
-          outline:none;
-           color: "#0e0d0d",
-         
-        }
+        .searchBox input {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  outline: none;
+  color: #0e0d0d; 
+  background: white; 
+}
+  .searchBox input::placeholder {
+  color: #999;
+}
 
         .searchBox button{
           background:#b8872b;

@@ -17,27 +17,44 @@ export default function Register() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleRegister = (e) => {
-    e.preventDefault();
-    if (form.password !== form.confirm) {
-      alert("Les mots de passe ne correspondent pas");
-      return;
-    }
+  const handleRegister = async (e) => {
+  e.preventDefault();
 
-    axios
-      .post("http://127.0.0.1:8000/api/register", {
+  if (form.password !== form.confirm) {
+    alert("Les mots de passe ne correspondent pas");
+    return;
+  }
+
+  try {
+    const res = await axios.post(
+      "http://127.0.0.1:8000/api/register",
+      {
         name: form.name,
         email: form.email,
         password: form.password,
         phone: form.phone,
         address: form.address,
-      })
-      .then((res) => {
-        console.log("Inscription réussie :", res.data);
-        navigate("/login");
-      })
-      .catch((err) => console.log(err));
-  };
+        role: "user",
+      }
+    );
+    
+localStorage.setItem("token", res.data.token);
+
+    console.log("Inscription réussie :", res.data);
+
+    // ✅ نحفظو user فـ localStorage
+    localStorage.setItem("user", JSON.stringify(res.data.user));
+
+    alert("Compte créé avec succès 🎉");
+
+    // ✅ auto login -> redirect
+    navigate("/");
+  } catch (err) {
+  console.log("FULL ERROR:", err);
+  console.log("RESPONSE:", err.response);
+  alert(err.response?.data?.message || "Erreur lors de l'inscription ❌");
+}
+};
 
   return (
     <>
@@ -140,7 +157,7 @@ export default function Register() {
         }
 
         .card {
-          background: rgba(255,255,255,0.15);
+          background: rgba(12, 12, 12, 0.15);
           backdrop-filter: blur(12px);
           padding: 30px;
           width: 420px;
@@ -177,11 +194,11 @@ export default function Register() {
           border-radius: 8px;
           border: none;
           outline: none;
-          background: rgba(255,255,255,0.9);
+          background: rgba(138, 115, 77, 0.9);
         }
 
         input:focus {
-          box-shadow: 0 0 0 2px #e6c378;
+          box-shadow: 0 0 0 2px #c79f49;
         }
 
         .row {
@@ -197,7 +214,7 @@ export default function Register() {
           width: 100%;
           margin-top: 20px;
           padding: 12px;
-          background: #e6c378;
+          background: #e4b247;
           color: #5c3a1e;
           border: none;
           border-radius: 8px;
@@ -217,7 +234,7 @@ export default function Register() {
         }
 
         .login-link span {
-          color: #ffe4a3;
+          color: #c4bdb2;
           cursor: pointer;
         }
 

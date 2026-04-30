@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+ use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -60,4 +60,36 @@ class AuthController extends Controller
             'token' => $token,
         ]);
     }
+    public function redirectToGoogle()
+{
+    return Socialite::driver('google')->redirect();
 }
+
+ public function logout(Request $request)
+{
+    $request->user()->tokens()->delete();
+
+    return response()->json([
+        'message' => 'Logged out successfully'
+    ]);
+}
+
+
+public function handleGoogleCallback()
+{
+    $googleUser = Socialite::driver('google')->user();
+
+    $user = User::updateOrCreate([
+        'email' => $googleUser->email,
+    ], [
+        'name' => $googleUser->name,
+        'password' => bcrypt('google'),
+        'role' => 'user',
+    ]);
+
+    $token = $user->createToken('auth_token')->plainTextToken;
+
+    return redirect("http://localhost:3000/login?token=".$token);
+}
+}
+ 

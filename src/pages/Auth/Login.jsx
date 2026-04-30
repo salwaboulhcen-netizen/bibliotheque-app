@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
@@ -51,7 +51,15 @@ const handleLogin = (e) => {
 
   }, 1000);
 };
+useEffect(() => {
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get("token");
 
+  if (token) {
+    localStorage.setItem("token", token);
+    navigate("/");
+  }
+}, []);
   const handleGoogleLogin = () => {
   window.location.href = "http://localhost:8000/api/auth/google";
 };
